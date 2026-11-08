@@ -15,9 +15,44 @@ const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const themeToggle = document.getElementById("themeToggle");
 
+// LOAD SAVED TASKS
 let tasks = JSON.parse(localStorage.getItem("taskflowTasks")) || [];
+
 let currentView = "all";
 let editingTaskId = null;
+
+// CREATE SORTING DROPDOWN
+const toolbar = document.querySelector(".toolbar");
+
+const sortFilter = document.createElement("select");
+sortFilter.id = "sortFilter";
+sortFilter.setAttribute("aria-label", "Sort tasks");
+
+const sortOptions = [
+    ["newest", "Newest First"],
+    ["oldest", "Oldest First"],
+    ["high", "High Priority First"],
+    ["low", "Low Priority First"],
+    ["due", "Earliest Due Date"]
+];
+
+sortOptions.forEach(([value, label]) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    sortFilter.appendChild(option);
+});
+
+toolbar.appendChild(sortFilter);
+
+// STYLE SORTING DROPDOWN
+sortFilter.style.width = "180px";
+sortFilter.style.padding = "12px";
+sortFilter.style.border = "1px solid var(--border)";
+sortFilter.style.borderRadius = "9px";
+sortFilter.style.background = "var(--card)";
+sortFilter.style.color = "var(--text)";
+sortFilter.style.cursor = "pointer";
 
 // DATE
 document.getElementById("dateLabel").textContent =
@@ -55,8 +90,10 @@ function saveTasks() {
 addTaskBtn.addEventListener("click", () => {
     editingTaskId = null;
     taskForm.reset();
+
     formTitle.textContent = "Create a New Task";
     saveTaskBtn.textContent = "Save Task";
+
     taskForm.classList.remove("hidden");
     taskInput.focus();
 });
@@ -85,8 +122,11 @@ taskForm.addEventListener("submit", (event) => {
             task.dueDate = taskDate.value;
         }
     } else {
+        const now = Date.now();
+
         tasks.push({
-            id: Date.now(),
+            id: now,
+            createdAt: now,
             title,
             category: taskCategory.value,
             priority: taskPriority.value,
@@ -96,6 +136,7 @@ taskForm.addEventListener("submit", (event) => {
     }
 
     saveTasks();
+
     taskForm.reset();
     taskForm.classList.add("hidden");
     editingTaskId = null;
@@ -145,7 +186,7 @@ function toggleTask(id) {
     renderTasks();
 }
 
-// FILTERS
+// SIDEBAR FILTERS
 document.querySelectorAll(".nav-item").forEach(button => {
     button.addEventListener("click", () => {
         currentView = button.dataset.view;
@@ -172,6 +213,45 @@ searchInput.addEventListener("input", renderTasks);
 
 // CATEGORY FILTER
 categoryFilter.addEventListener("change", renderTasks);
+
+// SORT FILTER
+sortFilter.addEventListener("change", renderTasks);
+
+// SMART SORTING
+function sortTasks(taskArray) {
+    const selectedSort = sortFilter.value;
+
+    const priorityOrder = {
+        High: 1,
+        Medium: 2,
+        Low: 3
+    };
+
+    return [...taskArray].sort((a, b) => {
+        switch (selectedSort) {
+            case "oldest":
+                return (a.createdAt || a.id) - (b.createdAt || b.id);
+
+            case "high":
+                return (priorityOrder[a.priority] || 2) -
+                       (priorityOrder[b.priority] || 2);
+
+            case "low":
+                return (priorityOrder[b.priority] || 2) -
+                       (priorityOrder[a.priority] || 2);
+
+            case "due":
+                if (!a.dueDate && !b.dueDate) return 0;
+                if (!a.dueDate) return 1;
+                if (!b.dueDate) return -1;
+                return a.dueDate.localeCompare(b.dueDate);
+
+            case "newest":
+            default:
+                return (b.createdAt || b.id) - (a.createdAt || a.id);
+        }
+    });
+}
 
 // UPDATE DASHBOARD
 function updateDashboard() {
@@ -227,16 +307,24 @@ function renderTasks() {
         return matchesSearch && matchesCategory && matchesView;
     });
 
+    // APPLY SORTING
+    filteredTasks = sortTasks(filteredTasks);
+
     document.getElementById("taskCount").textContent =
         `${filteredTasks.length} tasks`;
 
     if (filteredTasks.length === 0) {
-        taskList.innerHTML = `
-            <div class="empty-state">
-                <h3>Nothing here yet ✨</h3>
-                <p>Add a task and start being productive!</p>
-            </div>
-        `;
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+
+        const heading = document.createElement("h3");
+        heading.textContent = "Nothing here yet ✨";
+
+        const message = document.createElement("p");
+        message.textContent = "Add a task and start being productive!";
+
+        empty.append(heading, message);
+        taskList.appendChild(empty);
     }
 
     filteredTasks.forEach(task => {
@@ -299,8 +387,8 @@ function renderTasks() {
         deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
         actions.append(editBtn, deleteBtn);
-
         item.append(checkbox, details, actions);
+
         taskList.appendChild(item);
     });
 

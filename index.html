@@ -16,9 +16,7 @@
 
 <div class="app-container">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
         <div class="brand">
             <span class="brand-icon">✦</span>
             <span>TaskFlow</span>
@@ -27,35 +25,22 @@
         <p class="sidebar-heading">MENU</p>
 
         <nav class="nav-menu">
-            <button class="nav-item active" data-view="all">
-                <span>▦</span> All Tasks
-            </button>
-
-            <button class="nav-item" data-view="pending">
-                <span>◷</span> Pending
-            </button>
-
-            <button class="nav-item" data-view="completed">
-                <span>✓</span> Completed
-            </button>
+            <button class="nav-item active" data-view="all"><span>▦</span> All Tasks</button>
+            <button class="nav-item" data-view="pending"><span>◷</span> Pending</button>
+            <button class="nav-item" data-view="completed"><span>✓</span> Completed</button>
         </nav>
 
         <p class="sidebar-heading workspace-title">WORKSPACES</p>
 
         <div class="workspace-list">
             <button class="workspace-item" data-category="Personal">
-                <span class="workspace-dot personal-dot"></span>
-                Personal
+                <span class="workspace-dot personal-dot"></span> Personal
             </button>
-
             <button class="workspace-item" data-category="Study">
-                <span class="workspace-dot study-dot"></span>
-                Study
+                <span class="workspace-dot study-dot"></span> Study
             </button>
-
             <button class="workspace-item" data-category="Work">
-                <span class="workspace-dot work-dot"></span>
-                Work
+                <span class="workspace-dot work-dot"></span> Work
             </button>
         </div>
 
@@ -65,10 +50,8 @@
                 <p>Small steps every day lead to big results.</p>
             </div>
         </div>
-
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <header class="topbar">
@@ -79,17 +62,12 @@
             </div>
 
             <div class="topbar-right">
-                <button id="themeToggle" class="theme-toggle" type="button">
-                    🌙 Dark Mode
-                </button>
-
+                <button id="themeToggle" class="theme-toggle" type="button">🌙 Dark Mode</button>
                 <div class="profile-circle">B</div>
             </div>
         </header>
 
-        <!-- DASHBOARD STATS -->
         <section class="stats-grid">
-
             <div class="stat-card">
                 <div class="stat-icon total-icon">▦</div>
                 <p>Total Tasks</p>
@@ -110,10 +88,8 @@
                 <h2 id="pendingTasks">0</h2>
                 <span>Tasks to complete</span>
             </div>
-
         </section>
 
-        <!-- TASK SECTION -->
         <section class="task-section">
 
             <div class="section-heading">
@@ -123,25 +99,18 @@
                     <p class="section-description">Organise your day, one task at a time.</p>
                 </div>
 
-                <button id="addTaskBtn" class="add-task-btn" type="button">
-                    + Add New Task
-                </button>
+                <div class="heading-actions">
+                    <button id="calendarToggle" class="calendar-toggle" type="button">📅 Calendar View</button>
+                    <button id="addTaskBtn" class="add-task-btn" type="button">+ Add New Task</button>
+                </div>
             </div>
 
-            <!-- ADD TASK FORM -->
             <form id="taskForm" class="task-form hidden">
-
                 <h3 id="formTitle">Create a New Task</h3>
 
-                <input
-                    type="text"
-                    id="taskInput"
-                    placeholder="What do you need to do?"
-                    required
-                >
+                <input type="text" id="taskInput" placeholder="What do you need to do?" required>
 
                 <div class="form-row">
-
                     <select id="taskCategory">
                         <option value="Personal">Personal</option>
                         <option value="Study">Study</option>
@@ -155,31 +124,18 @@
                     </select>
 
                     <input type="date" id="taskDate">
-
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" id="closeFormBtn" class="cancel-btn">
-                        Cancel
-                    </button>
-
-                    <button type="submit" id="saveTaskBtn" class="save-btn">
-                        Save Task
-                    </button>
+                    <button type="button" id="closeFormBtn" class="cancel-btn">Cancel</button>
+                    <button type="submit" id="saveTaskBtn" class="save-btn">Save Task</button>
                 </div>
-
             </form>
 
-            <!-- SEARCH AND FILTER -->
             <div class="toolbar">
-
                 <div class="search-box">
                     <span>⌕</span>
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Search your tasks..."
-                    >
+                    <input type="text" id="searchInput" placeholder="Search your tasks...">
                 </div>
 
                 <select id="categoryFilter">
@@ -188,20 +144,52 @@
                     <option value="Study">Study</option>
                     <option value="Work">Work</option>
                 </select>
-
             </div>
 
-            <!-- TASK LIST -->
-            <div class="task-list-header">
-                <h3>Task List</h3>
-                <span id="taskCount">0 tasks</span>
-            </div>
+            <!-- CALENDAR VIEW -->
+            <section id="calendarView" class="calendar-view hidden">
 
-            <div id="taskList" class="task-list"></div>
+                <div class="calendar-header">
+                    <div>
+                        <p class="eyebrow">PLAN YOUR MONTH</p>
+                        <h3 id="calendarMonth">Month Year</h3>
+                    </div>
 
-            <!-- PROGRESS -->
+                    <div class="calendar-controls">
+                        <button id="previousMonth" type="button" aria-label="Previous month">←</button>
+                        <button id="todayMonth" type="button">Today</button>
+                        <button id="nextMonth" type="button" aria-label="Next month">→</button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid" id="calendarGrid">
+                    <div class="calendar-day-name">Sun</div>
+                    <div class="calendar-day-name">Mon</div>
+                    <div class="calendar-day-name">Tue</div>
+                    <div class="calendar-day-name">Wed</div>
+                    <div class="calendar-day-name">Thu</div>
+                    <div class="calendar-day-name">Fri</div>
+                    <div class="calendar-day-name">Sat</div>
+                </div>
+
+                <div id="selectedDateTasks" class="selected-date-tasks">
+                    <h4>Select a date to view its tasks</h4>
+                    <p>Your scheduled tasks will appear here.</p>
+                </div>
+
+            </section>
+
+            <!-- NORMAL TASK LIST -->
+            <section id="normalTaskView">
+                <div class="task-list-header">
+                    <h3>Task List</h3>
+                    <span id="taskCount">0 tasks</span>
+                </div>
+
+                <div id="taskList" class="task-list"></div>
+            </section>
+
             <div class="progress-section">
-
                 <div class="progress-heading">
                     <h3>Daily Progress</h3>
                     <span id="progressText">0%</span>
@@ -212,7 +200,6 @@
                 </div>
 
                 <p id="progressCaption">Start completing tasks to see your progress.</p>
-
             </div>
 
         </section>
@@ -222,7 +209,6 @@
         </footer>
 
     </main>
-
 </div>
 
 <script src="script.js"></script>
