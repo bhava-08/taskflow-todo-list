@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | My Productivity</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">✦</span>
+            <span>TaskFlow</span>
+        </div>
+
+        <p class="sidebar-heading">MENU</p>
+
+        <nav class="nav-menu">
+            <button class="nav-item active" data-view="all">
+                <span>▦</span> All Tasks
+            </button>
+
+            <button class="nav-item" data-view="pending">
+                <span>◷</span> Pending
+            </button>
+
+            <button class="nav-item" data-view="completed">
+                <span>✓</span> Completed
+            </button>
+        </nav>
+
+        <p class="sidebar-heading workspace-title">WORKSPACES</p>
+
+        <div class="workspace-list">
+            <button class="workspace-item" data-category="Personal">
+                <span class="workspace-dot personal-dot"></span>
+                Personal
+            </button>
+
+            <button class="workspace-item" data-category="Study">
+                <span class="workspace-dot study-dot"></span>
+                Study
+            </button>
+
+            <button class="workspace-item" data-category="Work">
+                <span class="workspace-dot work-dot"></span>
+                Work
+            </button>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-note">
+                <span>✧</span>
+                <p>Small steps every day lead to big results.</p>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="date-label" id="dateLabel"></p>
+                <h1>Good day, Bhava <span>✦</span></h1>
+                <p class="welcome-text">Let's make today productive.</p>
+            </div>
+
+            <div class="topbar-right">
+                <button id="themeToggle" class="theme-toggle" type="button">
+                    🌙 Dark Mode
+                </button>
+
+                <div class="profile-circle">B</div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD STATS -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon total-icon">▦</div>
+                <p>Total Tasks</p>
+                <h2 id="totalTasks">0</h2>
+                <span>Tasks in your list</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon completed-icon">✓</div>
+                <p>Completed</p>
+                <h2 id="completedTasks">0</h2>
+                <span>Tasks finished</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon pending-icon">◷</div>
+                <p>Pending</p>
+                <h2 id="pendingTasks">0</h2>
+                <span>Tasks to complete</span>
+            </div>
+
+        </section>
+
+        <!-- TASK SECTION -->
+        <section class="task-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR PRODUCTIVITY</p>
+                    <h2>My Tasks</h2>
+                    <p class="section-description">Organise your day, one task at a time.</p>
+                </div>
+
+                <button id="addTaskBtn" class="add-task-btn" type="button">
+                    + Add New Task
+                </button>
+            </div>
+
+            <!-- ADD TASK FORM -->
+            <form id="taskForm" class="task-form hidden">
+
+                <h3 id="formTitle">Create a New Task</h3>
+
+                <input
+                    type="text"
+                    id="taskInput"
+                    placeholder="What do you need to do?"
+                    required
+                >
+
+                <div class="form-row">
+
+                    <select id="taskCategory">
+                        <option value="Personal">Personal</option>
+                        <option value="Study">Study</option>
+                        <option value="Work">Work</option>
+                    </select>
+
+                    <select id="taskPriority">
+                        <option value="Low">Low Priority</option>
+                        <option value="Medium" selected>Medium Priority</option>
+                        <option value="High">High Priority</option>
+                    </select>
+
+                    <input type="date" id="taskDate">
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="closeFormBtn" class="cancel-btn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" id="saveTaskBtn" class="save-btn">
+                        Save Task
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- SEARCH AND FILTER -->
+            <div class="toolbar">
+
+                <div class="search-box">
+                    <span>⌕</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search your tasks..."
+                    >
+                </div>
+
+                <select id="categoryFilter">
+                    <option value="All">All Categories</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Study">Study</option>
+                    <option value="Work">Work</option>
+                </select>
+
+            </div>
+
+            <!-- TASK LIST -->
+            <div class="task-list-header">
+                <h3>Task List</h3>
+                <span id="taskCount">0 tasks</span>
+            </div>
+
+            <div id="taskList" class="task-list"></div>
+
+            <!-- PROGRESS -->
+            <div class="progress-section">
+
+                <div class="progress-heading">
+                    <h3>Daily Progress</h3>
+                    <span id="progressText">0%</span>
+                </div>
+
+                <div class="progress-track">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+
+                <p id="progressCaption">Start completing tasks to see your progress.</p>
+
+            </div>
+
+        </section>
+
+        <footer class="footer">
+            Made with care ✦ Stay focused and keep growing.
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
